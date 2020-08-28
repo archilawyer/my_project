@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <title>로잉머신</title>
+
+        <!-- Required meta tags -->
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+              integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+              crossorigin="anonymous">
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+                integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+                crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+                integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+                crossorigin="anonymous"></script>
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+        <script>
+            // 로딩 후 바로 실행
+            $(document).ready(function () {
+                if ($.cookie('mytoken') == undefined) {
+                    // mytoken이라는 값으로 쿠키가 없으면, 로그인 창으로 이동시킵니다.
+                    alert('먼저 로그인을 해주세요')
+                    window.location.href = '/login'
+                } else {
+                    // 쿠기가 있으면, 유저 정보를 불러옵니다.
+                    load_user_info()
+                }
+            });
+
+            // 쿠키에 가지고 있는 token을 헤더에 담아서 보냅니다.
+            function load_user_info() {
+                $.ajax({
+                    type: "GET",
+                    url: "/api/nick",
+                    headers: {'token_give': $.cookie('mytoken')},
+                    data: {},
+                    success: function (response) {
+                        if (response['result'] == 'success') {
+                            // 올바른 결과값을 받으면 nickname을 입력해줍니다.
+                            $('#nickname').text(response['nickname'])
+                        } else {
+                            // 에러가 나면 메시지를 띄우고 로그인 창으로 이동합니다.
+                            alert(response['msg'])
+                            window.location.href = '/login'
+                        }
+                    }
+                })
+            }
+        </script>
+    </head>
+
+    <body>
+        <img src="{{ url_for('static', filename='로잉머신 메인이미지.png') }}"/>
+
+        <ul class="nav nav-pills">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                   aria-expanded="false">O/X 문제풀기</a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/constitutionallaw">헌법</a>
+                    <a class="dropdown-item" href="/administrativelaw">행정법</a>
+                    <a class="dropdown-item" href="/criminallaw">형법</a>
+                    <a class="dropdown-item" href="/criminalprocedurelaw">형사소송법</a>
+                    <a class="dropdown-item" href="/civillaw">민법</a>
+                    <a class="dropdown-item" href="/civilprocedurelaw">민사소송법</a>
+                    <a class="dropdown-item" href="/commerciallaw">상법</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Separated link</a>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">순위</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">자유게시판</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">수험용품</a>
+            </li>
+
+        </ul>
+
+        <!--카드 부트스트랩-->
+        <div class="row row-cols-1 row-cols-md-3">
+            <div class="col mb-4">
+                <div class="card">
+                    <img src="..." class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to
+                            additional content. This content is a little bit longer.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col mb-4">
+                <div class="card">
+                    <img src="..." class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to
+                            additional content. This content is a little bit longer.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col mb-4">
+                <div class="card">
+                    <img src="..." class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to
+                            additional content.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col mb-4">
+                <div class="card">
+                    <img src="..." class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">This is a longer card with supporting text below as a natural lead-in to
+                            additional content. This content is a little bit longer.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

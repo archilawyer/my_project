@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>행정법</title>
+
+        <!-- Required meta tags -->
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+              integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+              crossorigin="anonymous">
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+                integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+                crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+                integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+                crossorigin="anonymous"></script>
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+        <script>
+            let rws = [];
+            $(document).ready(function () {
+                qs_list();
+            });
+
+            function qs_list() {
+                $('#card-body').empty()
+                $('#result').empty()
+
+                $.ajax({
+                    type: "GET",
+                    url: "/api/list",
+                    data: {},
+                    success: function (response) {
+                        let tot_qs = response['show_qs']
+
+                        for (let i = 0; i < tot_qs.length; i++) {
+
+                            let question = tot_qs['문제']
+                            let answer = tot_qs['정답']
+                            let comment = tot_qs['해설']
+
+                            let html_temp = ``
+
+                            if (answer=="O") {
+                                html_temp = `
+                                     <div class="card-body">
+                                        <h5 class="card-title">${question}</h5>
+                                        <button onclick="click_r(${i})">o</button>
+                                        <button onclick="click_w(${i})">x</button>
+                                        <p class="lead">
+                                            <button onclick="show_comment()" id="btn-post-box" type="button" class="btn btn-primary">해설보기</button>
+                                        </p>
+                                            <div id="post-box" class="form-post" style="display:none">
+                                                <div class="form-group">
+                                                    <textarea class="form-control" rows="10">${comment}</textarea>
+                                                </div>
+                                            </div>
+                                     </div>
+                            `
+                            } else {
+                                html_temp = `
+                                     <div class="card-body">
+                                        <h5 class="card-title">${question}</h5>
+                                        <button onclick="click_w(${i})">o</button>
+                                        <button onclick="click_r(${i})">x</button>
+                                        <p class="lead">
+                                            <button onclick="show_comment()" id="btn-post-box" type="button" class="btn btn-primary">해설보기</button>
+                                        </p>
+                                            <div id="post-box" class="form-post" style="display:none">
+                                                <div class="form-group">
+                                                    <textarea class="form-control" rows="10">${comment}</textarea>
+                                                </div>
+                                            </div>
+                                     </div>
+                            `
+                            }
+
+                            $('#card-body').append(html_temp)
+                        }
+                    }
+                })
+            }
+
+            function show_comment() {
+// id 값 post-box의 display 값이 block 이면(= 눈에 보이면)
+                if ($('#post-box').css('display') == 'block') {
+// post-box를 가리고
+                    $('#post-box').hide();
+// 다시 버튼을 클릭하면, 박스 열기를 할 수 있게 텍스트 바꿔두기
+                    $('#btn-post-box').text('포스팅 박스 열기');
+                } else {
+// 아니면(눈에 보이지 않으면) post-box를 펴라
+                    $('#post-box').show();
+// 다시 버튼을 클릭하면, 박스 닫기를 할 수 있게 텍스트 바꿔두기
+                    $('#btn-post-box').text('포스팅 박스 닫기');
+                }
+            }
+
+            function click_r(num)  {
+                rws[num] = "R"
+                update_stats()
+            }
+
+            function click_w(num) {
+                rws[num] = "W"
+                update_stats()
+            }
+
+            function update_stats() {
+                let count_r = 0
+                let count_w = 0
+                for (let i = 0; i < rws.length; i++) {
+                    if (rws[i] == "R") {
+                        count_r += 1
+                    } else if (rws[i] == "W") {
+                        count_w += 1
+                    }
+                }
+
+                let html_temp = `<div id="statistics">
+                                    <h3>맞은 갯수 : ${count_r} </h3>
+                                    <h3>틀린 갯수 : ${count_w} </h3>
+                                    <h3>정답률 : ${parseInt(count_r/rws.length*100)} %</h3>
+                                </div>`
+                $('#result').append(html_temp)​
+            }
+
+        </script>
+
+    </head>
+    <body>
+        <h1>행정법</h1>
+
+        <div class="card">
+            <div id="card-body">
+                <h5 class="card-title">헌법 메인 문제다!</h5>
+                <a href="" class="btn btn-primary">O</a>
+                <a href="" class="btn btn-primary">X</a>
+                <a href="" class="btn btn-primary">해설</a>
+
+            </div>
+        </div>
+
+        <div id="result">
+            <h3>맞은 갯수 : 떙떙 </h3>
+            <h3>틀린 갯수 : 떙떙 </h3>
+            <h3>정답률 : 떙떙 %</h3>
+        </div>
+
+
+    </body>
+</html>
