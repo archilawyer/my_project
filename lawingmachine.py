@@ -60,6 +60,11 @@ def commerciallaw():
     return render_template('commerciallaw.html')
 
 
+@app.route('/ranking')
+def ranking():
+    return render_template('ranking.html')
+
+
 # API 역할을 하는 부분
 @app.route('/api/list', methods=['GET'])
 def show_list():
