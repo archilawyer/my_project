@@ -33,7 +33,7 @@
             });
 
             function qs_list() {
-                $('#card-body').empty()
+                $('#card-list').empty()
                 $('#result').empty()
 
                 $.ajax({
@@ -45,13 +45,13 @@
 
                         for (let i = 0; i < tot_qs.length; i++) {
 
-                            let question = tot_qs['문제']
-                            let answer = tot_qs['정답']
-                            let comment = tot_qs['해설']
+                            let question = tot_qs[i]['문제']
+                            let answer = tot_qs[i]['정답']
+                            let comment = tot_qs[i]['해설']
 
                             let html_temp = ``
 
-                            if (answer=="O") {
+                            if (answer == "O") {
                                 html_temp = `
                                      <div class="card-body">
                                         <h5 class="card-title">${question}</h5>
@@ -62,7 +62,7 @@
                                         </p>
                                             <div id="post-box" class="form-post" style="display:none">
                                                 <div class="form-group">
-                                                    <textarea class="form-control" rows="10">${comment}</textarea>
+                                                    <textarea class="form-control" rows="5">${comment}</textarea>
                                                 </div>
                                             </div>
                                      </div>
@@ -78,14 +78,14 @@
                                         </p>
                                             <div id="post-box" class="form-post" style="display:none">
                                                 <div class="form-group">
-                                                    <textarea class="form-control" rows="10">${comment}</textarea>
+                                                    <textarea class="form-control" rows="5">${comment}</textarea>
                                                 </div>
                                             </div>
                                      </div>
                             `
                             }
 
-                            $('#card-body').append(html_temp)
+                            $('#card-list').append(html_temp)
                         }
                     }
                 })
@@ -106,7 +106,7 @@
                 }
             }
 
-            function click_r(num)  {
+            function click_r(num) {
                 rws[num] = "R"
                 update_stats()
             }
@@ -130,10 +130,25 @@
                 let html_temp = `<div id="statistics">
                                     <h3>맞은 갯수 : ${count_r} </h3>
                                     <h3>틀린 갯수 : ${count_w} </h3>
-                                    <h3>정답률 : ${parseInt(count_r/rws.length*100)} %</h3>
+                                    <h3>정답률 : ${parseInt(count_r / rws.length * 100)} %</h3>
                                 </div>`
-                $('#result').append(html_temp)​
+                $("#result").html(html_temp)
             }
+
+            // 로그인한 닉네임+정답률을 db에 저장해두었다가 '랭킹'페이지에서 내림차순으로 불러온다
+            // function final_submit(record) {
+            //     //    Ajax의 post방식으로 db에 저장 -> 랭킹페이지에서 Ajax의 get방식으로 내림차순으로 불러오기
+            //     $.ajax({
+            //         type: "POST",
+            //         url: "/api/list",
+            //         data: {final_submit : record },
+            //         success: function (response) {
+            //             record = ${parseInt(count_r / rws.length * 100)}
+            //
+            //             window.location.reload();
+            //         }
+            //     })
+            // }
 
         </script>
 
@@ -141,8 +156,8 @@
     <body>
         <h1>행정법</h1>
 
-        <div class="card">
-            <div id="card-body">
+        <div id="card-list">
+            <div class="card-body">
                 <h5 class="card-title">헌법 메인 문제다!</h5>
                 <a href="" class="btn btn-primary">O</a>
                 <a href="" class="btn btn-primary">X</a>
@@ -155,6 +170,10 @@
             <h3>맞은 갯수 : 떙떙 </h3>
             <h3>틀린 갯수 : 떙떙 </h3>
             <h3>정답률 : 떙떙 %</h3>
+        </div>
+
+        <div id="fianl-submit">
+            <button onclick="final_submit()" id="btn-post-box" type="button" class="btn btn-primary">최종제출</button>
         </div>
 
 

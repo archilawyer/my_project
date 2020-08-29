@@ -73,6 +73,13 @@ def show_list():
 
 
 
+@app.route('/api/list', methods=['POST'])
+def final_submit():
+    final_record = request.form['final_submit']
+    print(final_record)
+    return jsonify({'result': 'success', 'msg': '이 요청은 POST!'})
+
+
 
 # JWT 토큰을 만들 때 필요한 비밀문자열입니다. 아무거나 입력해도 괜찮습니다.
 # 이 문자열은 서버만 알고있기 때문에, 내 서버에서만 토큰을 인코딩(=만들기)/디코딩(=풀기) 할 수 있습니다.
